@@ -1,10 +1,10 @@
-#include <iostream>  // various
-#include <conio.h>   // _getch
-#include <fstream>   // passwords
-#include <windows.h> // sleep
-#include <algorithm> // transform
-#include <string>	// strings
-#include <vector>	// vector arrays
+#include <iostream>		// various
+#include <conio.h>		// getch
+#include <fstream>		// passwords
+#include <windows.h>	// sleep
+#include <algorithm>	// transform
+#include <string>		// strings
+#include <vector>		// vector arrays
 
 namespace colors
 {

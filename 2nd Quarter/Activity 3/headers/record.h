@@ -1,10 +1,10 @@
 #ifndef RECORD_H
 #define RECORD_H
 
-#include <iostream>
-#include <conio.h>
-#include <sstream>
-#include <iomanip>
+#include <iostream>		// various
+#include <conio.h>		// getch
+#include <sstream>		// stoi
+#include <iomanip>		// setw
 
 #ifndef GRAPH_H
 #include "graph.h"
@@ -40,12 +40,6 @@ void record()
 	std::cin >> calStart;
 	std::cout << "Enter how many days the calendar should have: ";
 	std::cin >> calDays;
-	minWork = 8;
-	overTime = 300;
-	hourlyRate = 250;
-	calStart = 1;
-	calDays = 31;
-
 	calendar(7, 11, 1, 31);
 	int weekDay = calStart;
 	int week = 0;
