@@ -98,6 +98,7 @@ username:
 		}
 		ch = getch();
 	}
+	rtrim(username);
 	std::cout << "\e[0G";
 	std::cout << "Username: " << userOut << std::endl;
 	std::cout << "\e[4mPassword\e[24m: " << passOut << "\e[s" << std::string(16 - passOut.size(), '-') << "\e[u";

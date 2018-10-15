@@ -1,10 +1,10 @@
 #ifndef RECORD_H
 #define RECORD_H
 
-#include <iostream>		// various
-#include <conio.h>		// getch
-#include <sstream>		// stoi
-#include <iomanip>		// setw
+#include <iostream> // various
+#include <conio.h>  // getch
+#include <sstream>  // stoi
+#include <iomanip>  // setw
 
 #ifndef GRAPH_H
 #include "graph.h"
@@ -22,7 +22,7 @@ using namespace colors;
 
 void record()
 {
-	int minWork, overTime, hourlyRate, calStart, calDays;
+	int minWork, hourlyRate, pay, calStart, calDays;
 	std::cout << "Hours needed per day: ";
 	std::cin >> minWork;
 	std::cout << "Enter your hourly rate: ";
@@ -136,6 +136,11 @@ recordHours:
 					gotoxy(8 + (12 * weekDay), 4 + (4 * week));
 					std::cout << std::setw(3) << '>' + hours[day];
 				}
+				else
+				{
+					std::stringstream hourStream(hours[day]);
+					hourStream >> hourInt;
+				}
 			}
 		}
 		ch = getch();
@@ -143,6 +148,7 @@ recordHours:
 	if (hours[day].size() == 0)
 	{
 		hours[day] = "0";
+		hourInt = 0;
 		if (weekDay != 0)
 			color(4);
 		else
@@ -152,6 +158,14 @@ recordHours:
 	std::cout << std::string(3, ' ');
 	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
 	std::cout << std::setw(3) << hours[day];
+	if (weekDay == 0)
+		pay = hourInt * (hourlyRate * minWork);
+	else if (hourInt > minWork)
+		pay = (hourInt - minWork) * (hourlyRate * 2);
+	else
+		pay = hourInt * hourlyRate;
+	gotoxy(2 + (12 * weekDay), 5 + (4 * week));
+	std::cout << std::setw(9) << pay;
 	if (day < calDays)
 	{
 		if (weekDay == 6)
@@ -164,12 +178,7 @@ recordHours:
 		day++;
 		goto recordHours;
 	}
-	for (int day = 1; day <= calDays; day++)
-	{
-		int weekDay = calStart;
-		int week = 0;
-		gotoxy(2 + (12 * weekDay), 5 + (4 * week));
-		std::cout << std::setw(9) << hours[day];
-	}
+
+
 }
 #endif // !RECORD_H

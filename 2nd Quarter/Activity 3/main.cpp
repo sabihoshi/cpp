@@ -35,6 +35,7 @@ using namespace colors;
 int main()
 {
 	VT100();
+	std::cout << "\e]2;Login System\x07";
 start:
 	switch (state)
 	{

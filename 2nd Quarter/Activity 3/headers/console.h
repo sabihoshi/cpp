@@ -53,33 +53,39 @@ void VT100()
 	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 	SetConsoleMode(hOut, dwMode);
 }
+
 void gotoxyVT(int x, int y)
 {
 	VT100();
 	std::string str = "\e[" + std::to_string(y) + ";" + std::to_string(x) + "H";
 	std::cout << str;
 }
+
 void home()
 {
 	VT100();
 	std::cout << "\e[H";
 }
+
 void cls()
 {
 	VT100();
 	std::cout << "\e[H";
 	std::cout << "\e[J";
 }
+
 void eos()
 {
 	VT100();
 	std::cout << "\e[J";
 }
+
 void eol()
 {
 	VT100();
 	std::cout << "\e[K";
 }
+
 void repeatChar(int n, int ch)
 {
 
@@ -88,4 +94,5 @@ void repeatChar(int n, int ch)
 		putchar(ch);
 	}
 }
+
 #endif // !CONSOLE_H
