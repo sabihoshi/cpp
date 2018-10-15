@@ -14,10 +14,8 @@
 #include "./console.h"
 #endif // !CONSOLE_H
 
-using boxText::boxColors;
-using boxText::lines;
-using colors::bgColor;
-using colors::fgColor;
+using namespace boxText;
+using namespace colors;
 
 void box()
 {
@@ -26,7 +24,7 @@ void box()
 	repeatChar(30, 205);
 	putchar(187);
 	std::cout << std::endl;
-	for (int i = 0; i < lines.size(); i++)
+	for (unsigned int i = 0; i < lines.size(); i++)
 	{
 		double space = lines[i].size();
 		putchar(186);
@@ -44,7 +42,7 @@ void box()
 }
 void options(std::vector<std::string> lines)
 {
-	for (int i = 0; i < lines.size(); i++)
+	for (unsigned int i = 0; i < lines.size(); i++)
 	{
 		color(bgColor);
 		std::cout << "[" << i + 1 << "] ";

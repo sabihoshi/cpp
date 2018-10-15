@@ -2,6 +2,8 @@
 #define RECORD_H
 
 #include <iostream>
+#include <conio.h>
+#include <sstream>
 
 #ifndef GRAPH_H
 #include "graph.h"
@@ -14,6 +16,8 @@
 #ifndef COLOR_H
 #include "./color.h"
 #endif // !COLOR_H
+
+using namespace colors;
 
 void record()
 {
@@ -39,16 +43,16 @@ void record()
 	std::cin >> calDays;
 
 	calendar(7, 11, 1, 31);
+	int weekDay = calStart;
 	int week = 0;
 	int day = 1;
-	int weekDay = calStart;
+	int hourInt;
 	char ch;
-	std::string input;
-	std::vector<std::string>
-		hours;
+	std::vector<std::string> hours(calDays + 1);
 recordHours:
 	gotoxy(10 + (12 * weekDay), 4 + (4 * week));
 	color(fgColor);
+	std::cout << ">";
 	ch = getch();
 	while (ch != 13) // 13 is enter
 	{
@@ -58,31 +62,61 @@ recordHours:
 		case 127:
 			if (hours[day].size() != 0)
 			{
+				std::cout << std::string(hours[day].size() + 1, '\b') << std::string(hours[day].size() + 1, ' ') << std::string(hours[day].size(), '\b') << ">";
 				hours[day].resize(hours[day].size() - 1);
-				hours[day] = input;
-				std::cout << ' ';
+				std::stringstream hourStream(hours[day]);
+				hourStream >> hourInt;
+				if (hourInt < weekDays)
+					color(4);
+				else if (hourInt > weekDays)
+					color(2);
+				else
+					color(fgColor);
+				std::cout << hours[day];
 			}
-			break;
-		case 27: // 27 is escape
-			hours[day].resize(0);
-			gotoxy(10, 6);
-			std::cout << "\e[K";
 			break;
 		case 32: // 32 is space
 			break;
 		default:
-			if (hours[day].size() != 16)
+			if (ch >= 48 && ch <= 57)
 			{
-				std::cout << "\b\b" << ch;
-				hours[day] += std::to_string(ch);
+				std::string newHour = hours[day] + ch;
+				std::stringstream hourStream(newHour);
+				hourStream >> hourInt;
+				if (hourInt <= 24 && hourInt >= 0 && hours[day].size() < 2)
+				{
+					hours[day] += (ch);
+					if (hourInt < weekDays)
+						color(4);
+					else if (hourInt > weekDays)
+						color(2);
+					else
+						color(fgColor);
+					std::cout << std::string(hours[day].size() + 1, '\b') << ">" << hours[day];
+				}
 			}
 		}
 		ch = getch();
 	}
+	if (hours[day].size() == 0)
+	{
+		hours[day] = "0";
+		color(4);
+		std::cout << std::string(hours[day].size() + 1, '\b') << " 0";
+	}
+	else
+		std::cout << std::string(hours[day].size() + 1, '\b') << ' ';
 	if (day < calDays)
 	{
-		goto recordHours;
+		if (weekDay == 6)
+		{
+			week++;
+			weekDay = 0;
+		}
+		else
+			weekDay++;
 		day++;
+		goto recordHours;
 	}
 }
 #endif // !RECORD_H
