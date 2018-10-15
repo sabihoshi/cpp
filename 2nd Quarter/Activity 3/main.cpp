@@ -34,8 +34,7 @@ using namespace colors;
 
 int main()
 {
-	system("cls");
-	record();
+	VT100();
 start:
 	switch (state)
 	{

@@ -6,8 +6,8 @@
 #include <fstream>   // passwords
 #include <windows.h> // sleep
 #include <algorithm> // transform
-#include <string>	 // strings
-#include <vector>	 // vector arrays
+#include <string>	// strings
+#include <vector>	// vector arrays
 
 #ifndef BOX_H
 #include "./box.h"
@@ -55,16 +55,17 @@ void loginPass()
 }
 void loginMenu()
 {
+	VT100();
+	std::string userOut;
+	std::string passOut;
 login:
 	lines = {"LOGIN SYSTEM MENU", "CURRENT STATUS", "LOGGED OFF", ""};
 	boxColors = {fgColor, fgColor, 4, fgColor};
-	gotoxy(0, 0);
 	cls();
 	box();
-	std::cout << "Username: " << std::endl;
-	std::cout << "Password: " << std::string(16, '-') << "\e[J";
 username:
-	gotoxy(10 + username.size(), 6);
+	std::cout << "\e[4mUsername\e[24m: " << userOut << "\e[s" << std::endl;
+	std::cout << "Password: " << passOut << std::string(16 - passOut.size(), '-') << "\e[u";
 	char ch;
 	ch = getch();
 	while (ch != 13) // 13 is enter
@@ -75,6 +76,7 @@ username:
 		case 127:
 			if (username.size() != 0)
 			{
+				userOut.resize(userOut.size() - 1);
 				username.resize(username.size() - 1);
 				std::cout << "\b \b";
 			}
@@ -89,13 +91,16 @@ username:
 		default:
 			if (username.size() != 16)
 			{
-				putchar(toupper(ch));
+				userOut += (char)toupper(ch);
+				std::cout << (char)toupper(ch);
 				username += ch;
 			}
 		}
 		ch = getch();
 	}
-	gotoxy(10 + password.size(), 7);
+	std::cout << "\e[0G";
+	std::cout << "Username: " << userOut << std::endl;
+	std::cout << "\e[4mPassword\e[24m: " << passOut << "\e[s" << std::string(16 - passOut.size(), '-') << "\e[u";
 	ch = getch();
 	while (ch != 13) // 13 is enter
 	{
@@ -105,11 +110,13 @@ username:
 		case 127:
 			if (password.size() != 0)
 			{
+				passOut.resize(passOut.size() - 1);
 				password.resize(password.size() - 1);
 				std::cout << "\b-\b";
 			}
 			break;
 		case 27: // 27 is escape
+			std::cout << "\e[1F";
 			goto username;
 			break;
 		case 32: // 32 is space
@@ -117,6 +124,7 @@ username:
 		default:
 			if (password.size() != 16)
 			{
+				passOut += '*';
 				password += ch;
 				std::cout << '*';
 			}
@@ -126,7 +134,7 @@ username:
 
 	lines = {"LOGIN SYSTEM MENU", "CURRENT STATUS", "LOGGING IN", ""};
 	boxColors = {fgColor, fgColor, 6, fgColor};
-	std::cout << "\e[H";
+	gotoxy(0, 0);
 	box();
 	color(17);
 	gotoxy(6, 4);

@@ -4,22 +4,14 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
-
-namespace colors
-{
-int bgColor = 1;
-int fgColor = 7;
-} // namespace colors
+#include <stdio.h>
+#include <windows.h>
 
 #include "./headers/console.h"
-#include "./headers/table.h"
-
 using namespace std;
-using namespace colors;
 
 int main()
 {
-	system("cls");
-	calendar(7, 3, 1, 31);
-	gotoxy(0, 30);
+	gotoxyVT(30, 5);
+	cout << "Hey";
 }

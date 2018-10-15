@@ -22,13 +22,11 @@ using namespace colors;
 
 void record()
 {
-	int weekDays, overTime, hourlyRate, calStart, calDays;
+	int minWork, overTime, hourlyRate, calStart, calDays;
 	std::cout << "Hours needed per day: ";
-	//std::cin >> weekDays;
-	std::cout << "Enter your overtime rate: ";
-	//std::cin >> overTime;
+	std::cin >> minWork;
 	std::cout << "Enter your hourly rate: ";
-	//std::cin >> hourlyRate;
+	std::cin >> hourlyRate;
 	std::cout
 		<< "0 - Sunday" << std::endl
 		<< "1 - Monday" << std::endl
@@ -39,10 +37,10 @@ void record()
 		<< "6 - Saturday" << std::endl
 		<< std::endl
 		<< "Enter which day should the calendar start: ";
-	//std::cin >> calStart;
+	std::cin >> calStart;
 	std::cout << "Enter how many days the calendar should have: ";
-	//std::cin >> calDays;
-	weekDays = 8;
+	std::cin >> calDays;
+	minWork = 8;
 	overTime = 300;
 	hourlyRate = 250;
 	calStart = 1;
@@ -60,9 +58,9 @@ recordHours:
 	color(fgColor);
 	std::stringstream hourStream(hours[day]);
 	hourStream >> hourInt;
-	if (hourInt < weekDays)
+	if (hourInt < minWork)
 		color(4);
-	else if (hourInt > weekDays)
+	else if (hourInt > minWork)
 		color(2);
 	else
 		color(fgColor);
@@ -79,9 +77,9 @@ recordHours:
 				hours[day].resize(hours[day].size() - 1);
 				std::stringstream hourStream(hours[day]);
 				hourStream >> hourInt;
-				if (hourInt < weekDays)
+				if (hourInt < minWork)
 					color(4);
-				else if (hourInt > weekDays)
+				else if (hourInt > minWork)
 					color(2);
 				else
 					color(fgColor);
@@ -95,6 +93,15 @@ recordHours:
 		case 27: // 27 is escape
 			if (day > 1)
 			{
+				if (hours[day].size() == 0)
+				{
+					hours[day] = "0";
+					color(4);
+				}
+				gotoxy(8 + (12 * weekDay), 4 + (4 * week));
+				std::cout << std::string(3, ' ');
+				gotoxy(8 + (12 * weekDay), 4 + (4 * week));
+				std::cout << std::setw(3) << hours[day];
 				if (weekDay == 0)
 				{
 					week--;
@@ -117,9 +124,16 @@ recordHours:
 				if (hourInt <= 24 && hourInt >= 0 && hours[day].size() < 2 && !(hours[day].size() == 1 && hourInt == 0))
 				{
 					hours[day] += ch;
-					if (hourInt < weekDays)
+					if (weekDay == 0)
+					{
+						if (hourInt > 0)
+							color(2);
+						else
+							color(fgColor);
+					}
+					else if (hourInt < minWork)
 						color(4);
-					else if (hourInt > weekDays)
+					else if (hourInt > minWork)
 						color(2);
 					else
 						color(fgColor);
@@ -135,19 +149,15 @@ recordHours:
 	if (hours[day].size() == 0)
 	{
 		hours[day] = "0";
-		color(4);
-		gotoxy(8 + (12 * weekDay), 4 + (4 * week));
-		std::cout << std::string(3, ' ');
-		gotoxy(8 + (12 * weekDay), 4 + (4 * week));
-		std::cout << std::setw(3) << hours[day];
+		if (weekDay != 0)
+			color(4);
+		else
+			color(fgColor);
 	}
-	else
-	{
-		gotoxy(8 + (12 * weekDay), 4 + (4 * week));
-		std::cout << std::string(3, ' ');
-		gotoxy(8 + (12 * weekDay), 4 + (4 * week));
-		std::cout << std::setw(3) << hours[day];
-	}
+	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
+	std::cout << std::string(3, ' ');
+	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
+	std::cout << std::setw(3) << hours[day];
 	if (day < calDays)
 	{
 		if (weekDay == 6)
@@ -159,6 +169,13 @@ recordHours:
 			weekDay++;
 		day++;
 		goto recordHours;
+	}
+	for (int day = 1; day <= calDays; day++)
+	{
+		int weekDay = calStart;
+		int week = 0;
+		gotoxy(2 + (12 * weekDay), 5 + (4 * week));
+		std::cout << std::setw(9) << hours[day];
 	}
 }
 #endif // !RECORD_H
