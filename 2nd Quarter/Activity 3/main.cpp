@@ -35,6 +35,7 @@ using namespace colors;
 int main()
 {
 	system("cls");
+	record();
 start:
 	switch (state)
 	{
@@ -89,19 +90,3 @@ start:
 		break;
 	}
 }
-/*
-
-185 -> ╣
-186 -> ║
-187 -> ╗
-188 -> ╝
-200 -> ╚
-201 -> ╔
-202 -> ╩
-203 -> ╦
-204 -> ╠
-205 -> ═
-206 -> ╬
-
->1
-*/
