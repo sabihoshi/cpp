@@ -88,7 +88,6 @@ void eol()
 
 void repeatChar(int n, int ch)
 {
-
 	for (int i = 0; i < n; i++)
 	{
 		putchar(ch);

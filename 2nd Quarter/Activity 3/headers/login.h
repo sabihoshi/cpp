@@ -30,7 +30,7 @@ void loginFail()
 	password.resize(0);
 	home();
 	box();
-	getch();
+	_getch();
 }
 void loginPass()
 {
@@ -67,7 +67,7 @@ username:
 	std::cout << "\e[4mUsername\e[24m: " << userOut << "\e[s" << std::endl;
 	std::cout << "Password: " << passOut << std::string(16 - passOut.size(), '-') << "\e[u";
 	char ch;
-	ch = getch();
+	ch = _getch();
 	while (ch != 13) // 13 is enter
 	{
 		switch (ch)
@@ -96,13 +96,13 @@ username:
 				username += ch;
 			}
 		}
-		ch = getch();
+		ch = _getch();
 	}
 	rtrim(username);
 	std::cout << "\e[0G";
 	std::cout << "Username: " << userOut << std::endl;
 	std::cout << "\e[4mPassword\e[24m: " << passOut << "\e[s" << std::string(16 - passOut.size(), '-') << "\e[u";
-	ch = getch();
+	ch = _getch();
 	while (ch != 13) // 13 is enter
 	{
 		switch (ch)
@@ -130,7 +130,7 @@ username:
 				std::cout << '*';
 			}
 		}
-		ch = getch();
+		ch = _getch();
 	}
 
 	lines = {"LOGIN SYSTEM MENU", "CURRENT STATUS", "LOGGING IN", ""};
@@ -170,7 +170,7 @@ username:
 		std::ifstream passFile(fileName.c_str());
 		if (passFile.is_open())
 		{
-			getline(passFile, correctPass);
+			std::getline(passFile, correctPass);
 			if (password == correctPass)
 			{
 				state = 3;
@@ -188,7 +188,7 @@ username:
 			std::ifstream passFile(fileName.c_str());
 			if (passFile.is_open())
 			{
-				getline(passFile, correctPass);
+				std::getline(passFile, correctPass);
 				if (password == correctPass)
 				{
 					state = 2;

@@ -1,75 +1,97 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <iomanip>
+#include <iostream> // various
+#include <fstream>  // files
+#include <vector>   // arrays
+#include <string>   // stoi
 
-void graph(int weekDays, int overTime, int hourlyRate)
+#ifndef TABLE_H
+#include "./table.h"
+#endif // !TABLE_H
+
+#ifndef COLOR_H
+#include "./color.h"
+#endif // !COLOR_H
+
+using namespace access;
+using namespace colors;
+
+std::vector<std::string> readLines(std::string fileName)
 {
-	std::string divider = " | ";
+	std::vector<std::string> returnValueVector;
+	std::string currentLineBuffer;
 
-	// Output top headings
-	std::vector<std::string> days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-	int daysInAWeek = days.size();
-	for (int day = 0; day < daysInAWeek; day++)
+	std::ifstream inputStream(fileName);
+	if (!inputStream.good())
+		return returnValueVector;
+
+	while (std::getline(inputStream, currentLineBuffer))
 	{
-		std::cout << days[day];
-		if (day != daysInAWeek - 1)
-			std::cout << divider;
+		returnValueVector.push_back(currentLineBuffer);
 	}
-	std::cout << std::endl;
 
-	for (int week = 1; week <= 4; week++)
+	inputStream.close();
+	return returnValueVector;
+}
+void graph()
+{
+	std::string fileDir = ".\\records\\user\\" + username + "\\";
+	int choice;
+	std::vector<std::string> files = readLines(fileDir + username + ".txt");
+	for (unsigned int i = 0; i < files.size(); i++)
 	{
-		// Output spaces of Sunday
-		std::cout << std::setw((days.at(0)).length()) << ""
-				  << divider;
-
-		// Output weekDays (Monday - Friday)
-		for (int i = 1; i <= 5; i++)
+		std::cout << "[" << i << "] " << files.at(i) << std::endl;
+	}
+	std::cout << "What record do you want to open? > ";
+	std::cin >> choice;
+	std::vector<std::string> data = readLines(fileDir + files.at(choice) + "_data.txt");
+	int minWork = std::stoi(data.at(0));
+	int hourlyRate = std::stoi(data.at(1));
+	int calDays = std::stoi(data.at(2));
+	int calStart = std::stoi(data.at(3));
+	int weekDay = calStart;
+	int week = 0;
+	int hourInt, pay;
+	std::vector<std::string> hours = readLines(fileDir + files.at(choice) + "_hours.txt");
+	calendar(7, 11, calStart, calDays);
+	for (int i = 1; i <= calDays; i++)
+	{
+		hourInt = std::stoi(hours.at(i));
+		if (weekDay == 0)
 		{
-			std::cout << std::setw((days.at(i)).length())
-					  << weekDays << divider;
+			if (hourInt > 0)
+				color(2);
+			else
+				color(fgColor);
+			pay = hourInt * (hourlyRate * minWork);
 		}
-
-		// Output overTime (Saturday)
-		std::cout << std::setw((days.at(6)).length())
-				  << overTime << std::endl;
-	}
-	std::cout << "Total: " << (weekDays * 5) * 4 + overTime * 4;
-	std::cout << std::endl
-			  << std::endl;
-
-	// Output top headings
-	for (int day = 0; day < 7; day++)
-	{
-		std::cout << days[day];
-		if (day != daysInAWeek - 1)
-			std::cout << divider;
-	}
-	std::cout << std::endl;
-
-	for (int week = 1; week <= 4; week++)
-	{
-		// Output spaces of Sunday
-		std::cout << std::setw((days.at(0)).length()) << ""
-				  << divider;
-
-		// Output weekDays
-		for (int i = 1; i <= 5; i++)
+		else if (hourInt > minWork)
 		{
-			std::cout << std::setw((days.at(i)).length())
-					  << weekDays * hourlyRate << divider;
+			color(2);
+			pay = ((hourInt - minWork) * (hourlyRate * 2)) + (hourInt * hourlyRate);
 		}
-
-		// Output overTime
-		std::cout << std::setw((days.at(6)).length())
-				  << overTime * hourlyRate << std::endl;
+		else if (hourInt < minWork)
+		{
+			color(4);
+			pay = hourInt * hourlyRate;
+		}
+		else
+		{	color(fgColor);
+			pay = 0;
+		}
+		gotoxy(9 + (12 * weekDay), 4 + (4 * week));
+		std::cout << std::setw(2) << hours.at(i);
+		gotoxy(2 + (12 * weekDay), 5 + (4 * week));
+		std::cout << std::setw(9) << pay;
+		if (weekDay == 6)
+		{
+			week++;
+			weekDay = 0;
+		}
+		else
+			weekDay++;
 	}
-	std::cout << "Total: " << (weekDays * hourlyRate * 5) * 4 + overTime * hourlyRate * 4;
-	std::cout << std::endl;
 }
 
 #endif // !GRAPH_H

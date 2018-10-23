@@ -1,10 +1,10 @@
-#include <iostream>		// various
-#include <conio.h>		// getch
-#include <fstream>		// passwords
-#include <windows.h>	// sleep
-#include <algorithm>	// transform
-#include <string>		// strings
-#include <vector>		// vector arrays
+#include <iostream>  // various
+#include <conio.h>   // getch
+#include <fstream>   // passwords
+#include <windows.h> // sleep
+#include <algorithm> // transform
+#include <string>	// strings
+#include <vector>	// vector arrays
 
 namespace colors
 {
@@ -67,8 +67,11 @@ start:
 	{
 	case '1':
 		record();
+		goto start;
 		break;
 	case '2':
+		graph();
+		_getch();
 		break;
 	case '3':
 		changeColor();
@@ -77,7 +80,7 @@ start:
 	case '4':
 		username.resize(0);
 		password.resize(0);
-		state = 0;
+		state = -1;
 		loginMenu();
 		goto start;
 		break;
