@@ -132,7 +132,7 @@ username:
 				std::cout << '*';
 			}
 		}
-		ch = _getch();
+		ch = _getch(); 
 	}
 
 	lines = {"LOGIN SYSTEM MENU", "CURRENT STATUS", "LOGGING IN", ""};

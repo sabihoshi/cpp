@@ -34,8 +34,11 @@ using namespace colors;
 
 int main()
 {
+	SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
+	// ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+	consoleSize(32, 8, true);
 	VT100();
-	std::cout << "\e]2;Login System\x07";
+	std::cout << "\033]2;Login System\x07";
 start:
 	switch (state)
 	{
@@ -53,6 +56,7 @@ start:
 	std::cout << std::endl;
 	char choice;
 	lines = {"Record a salary", "View other records (WIP)", "Change color", "Logout"};
+	consoleOffset(0, 6, true);
 	options(lines);
 	color(12);
 	std::cout << "[X] ";
