@@ -56,6 +56,7 @@ void loginPass()
 void loginMenu()
 {
 	VT100();
+	consoleSize(32, 8, true);
 	std::string userOut;
 	std::string passOut;
 login:

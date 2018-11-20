@@ -34,9 +34,8 @@ using namespace colors;
 
 int main()
 {
-	SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
+	// SendMessage(GetConsoleWindow(), WM_SYSKEYDOWN, VK_RETURN, 0x20000000);
 	// ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
-	consoleSize(32, 8, true);
 	VT100();
 	std::cout << "\033]2;Login System\x07";
 start:

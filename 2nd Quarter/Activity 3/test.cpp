@@ -5,17 +5,26 @@
 #include <cmath>
 #include <vector>
 
-namespace colors
-{
-int bgColor = 1;
-int fgColor = 7;
-} // namespace colors
-
-#include "./headers/color.h"
-#include "./headers/console.h"
-
+using namespace std;
 int main()
 {
-	std::cout << "Rainbow";
-	
+	vector<string> users;
+	string username = "glaizel";
+	string password = "123456";
+	ifstream inFile("./users.txt");
+	string currentLine;
+	while (getline(inFile, currentLine))
+	{
+		users.push_back(currentLine);
+	}
+	for (int i = 0; i < users.size() / 2; i++)
+	{
+		if (username == users[i * 2] && password[(i * 2) + 1])
+		goto congrats;
+	}
+	cout << "Failed";
+	return 0;
+congrats:
+	cout << "Yay";
+	return 0;
 }

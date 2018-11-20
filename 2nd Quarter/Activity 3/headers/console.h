@@ -90,7 +90,20 @@ void consoleSize(int width, int height, bool center)
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r);
-	MoveWindow(console, r.left, r.top, (width * 8) + 24, (height * 16) + 24, TRUE);
+	MoveWindow(console, r.left, r.top, (width * 8), (height * 16) + 42, TRUE);
+
+	HANDLE hOut;
+	CONSOLE_SCREEN_BUFFER_INFO SBInfo;
+	COORD buffer;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleScreenBufferInfo(hOut, &SBInfo);
+
+	buffer.X = width;
+	buffer.Y = height;
+	SetConsoleScreenBufferSize(hOut, buffer);
+
+	MoveWindow(console, r.left, r.top, (width * 8) + 16, (height * 16) + 48, TRUE);
 
 	if (center)
 		consoleCenter();
@@ -102,6 +115,20 @@ void consoleOffset(int width, int height, bool center)
 	HWND console = GetConsoleWindow();
 	RECT r;
 	GetWindowRect(console, &r);
+	MoveWindow(console, r.left, r.top, (r.right - r.left) + (width * 8), (r.bottom - r.top) + (height * 16), TRUE);
+
+	HANDLE hOut;
+	CONSOLE_SCREEN_BUFFER_INFO SBInfo;
+	COORD buffer;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	GetConsoleScreenBufferInfo(hOut, &SBInfo);
+	buffer.X = width;
+	buffer.Y = height;
+
+	SetConsoleScreenBufferSize(hOut, buffer);
+
 	MoveWindow(console, r.left, r.top, (r.right - r.left) + (width * 8), (r.bottom - r.top) + (height * 16), TRUE);
 
 	if (center)

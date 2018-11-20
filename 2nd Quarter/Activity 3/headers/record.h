@@ -46,12 +46,14 @@ void record()
 	std::cin >> calDays;
 	std::cout << "Enter the name of your record: ";
 	std::cin >> calName;
+	consoleSize(85, 28, true);
 	calendar(7, 11, calStart, calDays);
 	int weekDay = calStart;
 	int week = 0;
 	int day = 1;
 	char ch;
 	std::vector<std::string> hours(calDays + 1);
+	std::vector<int> payTable(calDays);
 recordHours:
 	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
 	color(fgColor);
@@ -169,6 +171,7 @@ recordHours:
 		pay = ((hourInt - minWork) * (hourlyRate * 2)) + (hourInt * hourlyRate);
 	else
 		pay = hourInt * hourlyRate;
+	payTable.at(day) = pay;
 	gotoxy(2 + (12 * weekDay), 5 + (4 * week));
 	std::cout << std::setw(9) << pay;
 	if (day < calDays)
@@ -183,6 +186,14 @@ recordHours:
 		day++;
 		goto recordHours;
 	}
+	consoleOffset(0, 5, true);
+	int payTotal = 0;
+	for(int x : payTable)
+	{
+		payTotal += x;
+	}
+	gotoxy(0, 86);
+	std::cout << payTotal;
 	std::string newFile;
 	std::string fileDir = ".\\records\\user\\" + username + "\\";
 	std::string newDir = "mkdir" + fileDir;

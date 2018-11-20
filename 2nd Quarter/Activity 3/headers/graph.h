@@ -55,6 +55,7 @@ void graph()
 	int weekDay = calStart;
 	int week = 0;
 	int hourInt, pay;
+	int payTotal = 0;
 	consoleSize(85, 28, true);
 	std::vector<std::string> hours = readLines(fileDir + files.at(choice) + "_hours.txt");
 	calendar(7, 11, calStart, calDays);
@@ -84,6 +85,7 @@ void graph()
 			color(fgColor);
 			pay = 0;
 		}
+		payTotal += pay;
 		gotoxy(9 + (12 * weekDay), 4 + (4 * week));
 		std::cout << std::setw(2) << hours.at(i);
 		gotoxy(2 + (12 * weekDay), 5 + (4 * week));
@@ -96,6 +98,8 @@ void graph()
 		else
 			weekDay++;
 	}
+	consoleOffset(15, 0, true);
+	gotoxy(87, 2);
+	std::cout << payTotal;
 }
-
 #endif // !GRAPH_H
