@@ -59,7 +59,7 @@ workHours:
 	int day = 1;
 	char ch;
 	std::vector<std::string> hours(calDays + 1);
-	std::vector<int> payTable(calDays);
+	std::vector<int> payTable(calDays + 1);
 	enableThousands();
 recordHours:
 	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
@@ -178,7 +178,7 @@ recordHours:
 		pay = ((hourInt - minWork) * (hourlyRate * 2)) + (hourInt * hourlyRate);
 	else
 		pay = hourInt * hourlyRate;
-	payTable.at(day - 1) = pay;
+	payTable.at(day) = pay;
 	gotoxy(2 + (12 * weekDay), 5 + (4 * week));
 	std::cout << std::setw(9) << pay;
 	if (day < calDays)
@@ -194,7 +194,7 @@ recordHours:
 		goto recordHours;
 	}
 	int payTotal = 0;
-	for (unsigned int i = 0; i < payTable.size(); i++)
+	for (unsigned int i = 1; i < payTable.size(); i++)
 	{
 		payTotal += payTable.at(i);
 	}
