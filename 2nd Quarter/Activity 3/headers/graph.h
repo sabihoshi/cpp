@@ -5,6 +5,7 @@
 #include <fstream>  // files
 #include <vector>   // arrays
 #include <string>   // stoi
+#include <iomanip>  // setprecision
 
 #ifndef TABLE_H
 #include "./table.h"
@@ -13,6 +14,10 @@
 #ifndef COLOR_H
 #include "./color.h"
 #endif // !COLOR_H
+
+#ifndef CONSOLE_H
+#include "./console.h"
+#endif // !CONSOLE_H
 
 using namespace access;
 using namespace colors;
@@ -34,11 +39,65 @@ std::vector<std::string> readLines(std::string fileName)
 	inputStream.close();
 	return returnValueVector;
 }
+
 void graph()
 {
-	std::string fileDir = ".\\records\\user\\" + username + "\\";
+userStart:
+	gotoxy(0, 6);
+	eos();
+	std::string usernameView = username;
+	std::string userOut;
+	for (int i = 0; i < usernameView.size(); i++)
+		userOut += toupper(usernameView[i]);
+	std::cout << "\033[4mUsername\033[24m: " << userOut;
+	char ch;
+	ch = _getch();
+usernameAsk:
+	while (ch != 13) // 13 is enter
+	{
+		switch (ch)
+		{
+		case 8: // 8 is backspace
+		case 127:
+			if (usernameView.size() != 0)
+			{
+				userOut.resize(userOut.size() - 1);
+				usernameView.resize(usernameView.size() - 1);
+				std::cout << "\b \b";
+			}
+			break;
+		case 27: // 27 is escape
+			usernameView.resize(0);
+			gotoxy(10, 6);
+			std::cout << "\033[K";
+			break;
+		case 32: // 32 is space
+			break;
+		default:
+			if (usernameView.size() != 16)
+			{
+				userOut += (char)toupper(ch);
+				std::cout << (char)toupper(ch);
+				usernameView += ch;
+			}
+		}
+		ch = _getch();
+		goto usernameAsk;
+	}
+	rtrim(usernameView);
+	std::cout << "\033[0G";
+	std::cout << "Username: " << userOut << std::endl;
+	std::string fileDir = ".\\records\\user\\" + usernameView + "\\";
+	std::ifstream inputStream(fileDir + usernameView + ".txt");
+	if (!inputStream.good())
+	{
+		std::cout << "User does not have any records!" << std::endl;
+		_getch();
+		goto userStart;
+	}
+	inputStream.close();
 	int choice;
-	std::vector<std::string> files = readLines(fileDir + username + ".txt");
+	std::vector<std::string> files = readLines(fileDir + usernameView + ".txt");
 	consoleOffset(0, files.size(), true);
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
@@ -59,6 +118,8 @@ void graph()
 	consoleSize(85, 28, true);
 	std::vector<std::string> hours = readLines(fileDir + files.at(choice) + "_hours.txt");
 	calendar(7, 11, calStart, calDays);
+
+	enableThousands();
 	for (int i = 1; i <= calDays; i++)
 	{
 		hourInt = std::stoi(hours.at(i));
@@ -98,8 +159,6 @@ void graph()
 		else
 			weekDay++;
 	}
-	consoleOffset(15, 0, true);
-	gotoxy(87, 2);
-	std::cout << payTotal;
+	payComputation(payTotal);
 }
 #endif // !GRAPH_H

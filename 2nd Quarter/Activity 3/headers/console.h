@@ -6,7 +6,29 @@
 #include <cctype>
 #include <locale>
 #include <cmath>
+#include <iomanip>
 
+void enableThousands()
+{
+#ifndef COMMA_NUMPUNCT
+	class comma_numpunct : public std::numpunct<char>
+	{
+	  protected:
+		virtual char do_thousands_sep() const
+		{
+			return ',';
+		}
+
+		virtual std::string do_grouping() const
+		{
+			return "\03";
+		}
+	};
+#endif
+	// Enable grouping by thousands
+	std::locale comma_locale(std::locale(), new comma_numpunct());
+	std::cout.imbue(comma_locale);
+}
 // Trim from start (in place)
 static inline void ltrim(std::string &s)
 {

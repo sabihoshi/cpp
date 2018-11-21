@@ -27,6 +27,7 @@ std::vector<int> boxColors;
 #include "./headers/record.h"
 #include "./headers/login.h"
 #include "./headers/console.h"
+#include "./headers/graph.h"
 
 using namespace access;
 using namespace boxText;
@@ -55,7 +56,7 @@ start:
 	std::cout << std::endl;
 	char choice;
 	lines = {"Record a salary", "View other records (WIP)", "Change color", "Logout"};
-	consoleOffset(0, 6, true);
+	consoleSize(32, (lines.size() + 2) + 10, true);
 	options(lines);
 	color(12);
 	std::cout << "[X] ";
@@ -69,12 +70,20 @@ start:
 	switch (choice)
 	{
 	case '1':
+		if (state == 1)
+		{
+			std::cout << "You can't record as a guest!" << std::endl;
+			_getch();
+			goto start;
+		}
 		record();
+		_getch();
 		goto start;
 		break;
 	case '2':
 		graph();
 		_getch();
+		goto start;
 		break;
 	case '3':
 		changeColor();

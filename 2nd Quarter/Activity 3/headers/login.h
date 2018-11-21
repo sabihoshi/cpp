@@ -26,8 +26,6 @@ void loginFail()
 	lines = {"LOGIN SYSTEM MENU", "CURRENT STATUS", "PRESS ANY KEY TO RESTART", "FAILED"};
 	boxColors = {fgColor, fgColor, 6, 198};
 	state = 0;
-	username.resize(0);
-	password.resize(0);
 	home();
 	box();
 	_getch();
@@ -49,6 +47,7 @@ void loginPass()
 		lines[1] = "ADMIN ACCESS";
 	}
 	boxColors = {fgColor, fgColor, 6, 160};
+	consoleSize(32, lines.size() + 6, true);
 	home();
 	cls();
 	box();
@@ -69,7 +68,7 @@ username:
 	std::cout << "Password: " << passOut << std::string(16 - passOut.size(), '-') << "\033[u";
 	char ch;
 	ch = _getch();
-	usernameAsk:
+usernameAsk:
 	while (ch != 13) // 13 is enter
 	{
 		switch (ch)

@@ -5,12 +5,8 @@
 #include <conio.h>  // _getch
 #include <iomanip>  // setw
 #include <fstream>  // files
-#include <string>	// strings
-#include <sstream>	// sstreams
-
-#ifndef GRAPH_H
-#include "graph.h"
-#endif // !GRAPH_H
+#include <string>   // strings
+#include <sstream>  // sstreams
 
 #ifndef TABLE_H
 #include "./table.h"
@@ -20,6 +16,10 @@
 #include "./color.h"
 #endif // !COLOR_H
 
+#ifndef CONSOLE_H
+#include "./console.h"
+#endif // !CONSOLE_H
+
 using namespace colors;
 using namespace access;
 
@@ -27,8 +27,14 @@ void record()
 {
 	int minWork, hourlyRate, pay, calStart, calDays, hourInt;
 	std::string calName;
+workHours:
 	std::cout << "Hours needed per day: ";
 	std::cin >> minWork;
+	if (minWork > 24 || minWork < 0)
+	{
+		std::cout << "Invalid hours!" << std::endl;
+		goto workHours;
+	}
 	std::cout << "Enter your hourly rate: ";
 	std::cin >> hourlyRate;
 	std::cout
@@ -54,6 +60,7 @@ void record()
 	char ch;
 	std::vector<std::string> hours(calDays + 1);
 	std::vector<int> payTable(calDays);
+	enableThousands();
 recordHours:
 	gotoxy(8 + (12 * weekDay), 4 + (4 * week));
 	color(fgColor);
@@ -171,7 +178,7 @@ recordHours:
 		pay = ((hourInt - minWork) * (hourlyRate * 2)) + (hourInt * hourlyRate);
 	else
 		pay = hourInt * hourlyRate;
-	payTable.at(day) = pay;
+	payTable.at(day - 1) = pay;
 	gotoxy(2 + (12 * weekDay), 5 + (4 * week));
 	std::cout << std::setw(9) << pay;
 	if (day < calDays)
@@ -186,14 +193,14 @@ recordHours:
 		day++;
 		goto recordHours;
 	}
-	consoleOffset(0, 5, true);
 	int payTotal = 0;
-	for(int x : payTable)
+	for (unsigned int i = 0; i < payTable.size(); i++)
 	{
-		payTotal += x;
+		payTotal += payTable.at(i);
 	}
-	gotoxy(0, 86);
-	std::cout << payTotal;
+	payComputation(payTotal);
+
+	// Write to file
 	std::string newFile;
 	std::string fileDir = ".\\records\\user\\" + username + "\\";
 	std::string newDir = "mkdir" + fileDir;
@@ -215,7 +222,8 @@ recordHours:
 		record.close();
 		std::ofstream newRecord;
 		newRecord.open(fileDir + username + ".txt", std::ios::app);
-		newRecord << "\n" << calName;
+		newRecord << "\n"
+				  << calName;
 		newRecord.close();
 	}
 	std::ofstream hourRecord(fileDir + calName + "_hours.txt");
