@@ -47,7 +47,7 @@ userStart:
 	eos();
 	std::string usernameView = username;
 	std::string userOut;
-	for (int i = 0; i < usernameView.size(); i++)
+	for (unsigned int i = 0; i < usernameView.size(); i++)
 		userOut += toupper(usernameView[i]);
 	std::cout << "\033[4mUsername\033[24m: " << userOut;
 	char ch;
